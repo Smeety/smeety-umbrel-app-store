@@ -1,19 +1,24 @@
----
+version: "3.7"
+
 services:
-  lab-dash:
-      container_name: lab-dash
-      image: ghcr.io/anthonygress/lab-dash:latest
-      privileged: true
-      #network_mode: host # for monitoring network usage stats. run `sudo ufw allow 2022/tcp` on ubuntu to allow access through firewall
-      ports:
-        - 2022:2022
-      environment:
-        - MtP2sIy0Dw1krouz+XVau/SvK15lgi267fmGivd89bs= # change this to a random string for security
-      volumes:
-        - /sys:/sys:ro
-        - /docker/lab-dash/config:/config
-        - /docker/lab-dash/uploads:/app/public/uploads
-        - /var/run/docker.sock:/var/run/docker.sock
-      restart: unless-stopped
-      labels:
-        - "com.centurylinklabs.watchtower.enable=true"
+  # Umbrel's reverse proxy for dashboard→container routing
+  app_proxy:
+    environment:
+      # Use a fixed container name so we know exactly what to target
+      APP_HOST: smeety-lab-dash_web_1
+      APP_PORT: 2022
+      PROXY_AUTH_ADD: "true"   # keep Umbrel's auth in front of the app
+
+  web:
+    container_name: smeety-lab-dash_web_1
+    image: ghcr.io/anthonygress/lab-dash:latest
+    privileged: true
+    restart: on-failure
+    environment:
+      # Umbrel provides APP_SEED automatically; use it as Lab Dash's SECRET
+      SECRET: ${APP_SEED}
+    volumes:
+      - ${APP_DATA_DIR}/config:/config
+      - ${APP_DATA_DIR}/uploads:/app/public/uploads
+      - /sys:/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock
