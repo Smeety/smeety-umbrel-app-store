@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: labdash_web
+      APP_PORT: 2022
+      PROXY_AUTH_ADD: "true"
+
+  web:
+    container_name: labdash_web
+    image: ghcr.io/anthonygress/lab-dash:latest
+    privileged: true
+    environment:
+      SECRET: ${LAB_DASH_SECRET}
+    volumes:
+      - ${APP_DATA_DIR}/config:/config
+      - ${APP_DATA_DIR}/uploads:/app/public/uploads
+      - /sys:/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
