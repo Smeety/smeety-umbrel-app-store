@@ -1,0 +1,22 @@
+manifestVersion: 1
+id: lab-dash
+name: Lab Dash
+tagline: A lightweight server dashboard
+category: system
+version: "1.0.0"
+port: 2022
+description: >
+  Lab Dash is a simple, lightweight dashboard for monitoring system
+  and Docker container information. It provides an easy-to-use web
+  interface that runs on your Umbrel server.
+developer: Anthony Gress
+website: https://github.com/AnthonyGress/lab-dash
+repo: https://github.com/AnthonyGress/lab-dash
+support: https://github.com/AnthonyGress/lab-dash/issues
+gallery: []
+releaseNotes: >-
+  Initial Umbrel packaging of Lab Dash.
+dependencies: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""
